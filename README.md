@@ -28,3 +28,4 @@ log1.error("%s-%s\n", "this is a test", "test");
 2017-01-30 00:08:32-111| INFO|            tag1| 4824|this is a test-test
 2017-01-30 00:08:32-111| WARN|            tag1| 4824|this is a test-test
 2017-01-30 00:08:32-111|ERROR|            tag1| 4824|this is a test-test
+//测试有中文注释
