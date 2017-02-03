@@ -6,7 +6,7 @@
 const char* test = "test";
 void print_log(void* args)
 {
-    zb::Log* log = (zb::Log*) args;
+    zb::Log log = *(zb::Log*) args;
     for (int i = 0 ; i < 10*1000 ; i++)
     {
         log->debug("%s-%s\n", "this is a test", test);
@@ -33,6 +33,7 @@ void test1()
     _beginthread(print_log, NULL, &log5);
     _beginthread(print_log, NULL, &log6);
     _beginthread(print_log, NULL, &log7);
+    ::Sleep(1000);
 }
 void test2()
 {
