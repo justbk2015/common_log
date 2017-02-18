@@ -66,7 +66,7 @@ namespace zb
 		//************************************
 		Log(const char* tag, int level, int format, int output, const char* file);
         Log& operator=(const Log& l);
-		~Log();
+		~Log(); 
 	public:
 		void debug(const char* format, ...);
 		void info(const char* format, ...);

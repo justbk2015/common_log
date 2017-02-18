@@ -110,13 +110,10 @@ int FileOutputStreamFactory::gc()
     MAP_FILEOUTPUTSTREAM::iterator it = m_outputs->begin();
     for (;it != m_outputs->end() ;)
     {
-        MAP_FILEOUTPUTSTREAM::iterator it_tmp = it ;
         if (it->second.only())
         {
-            it_tmp = ++ it;
-            m_outputs->erase(--it);
+            m_outputs->erase(it++);
             gc_number ++;
-            it = it_tmp;
         }
         else
         {

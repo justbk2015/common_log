@@ -24,7 +24,7 @@ namespace zb
     };
 
     template <class T>
-    class LOG_USECOUNT_INTERFACE CopyOnWriteHandle
+    class CopyOnWriteHandle
     {
     public:
         CopyOnWriteHandle():m_t(NULL){}
