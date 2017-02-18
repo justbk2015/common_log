@@ -152,6 +152,7 @@
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="OutStream.cpp" />
     <ClCompile Include="Path.cpp" />
+    <ClCompile Include="Thread.cpp" />
     <ClCompile Include="UseCount.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +161,7 @@
     <ClInclude Include="..\include\OutStream.h" />
     <ClInclude Include="..\include\Path.h" />
     <ClInclude Include="..\include\platform.h" />
+    <ClInclude Include="..\include\Thread.h" />
     <ClInclude Include="..\include\UseCount.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

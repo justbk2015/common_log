@@ -22,4 +22,5 @@
 #define LOG_PATH_EXPORTS
 #define LOG_LOCK_EXPORTS
 #define LOG_USECOUNT_EXPORTS
+#define LOG_THREAD_EXPORTS
 #endif

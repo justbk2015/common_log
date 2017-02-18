@@ -102,6 +102,7 @@ std::string  Log::format_log(int level, const char* format, va_list args)
     char tmp_buf[LOG_MAX_SIZE] = {0};
     vsprintf_s(tmp_buf, LOG_MAX_SIZE, format, args);
     total_log += tmp_buf;
+    total_log += '\n';
     return total_log;
 }
 std::string Log::format_prefix(int level)

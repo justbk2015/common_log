@@ -51,6 +51,14 @@ namespace zb
                 }
             }
         }
+        T* operator->()
+        {
+            return m_t;
+        }
+        T* get() const
+        {
+            return m_t;
+        }
         bool only() const
         {
             return m_use.only();
