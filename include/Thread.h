@@ -29,7 +29,7 @@ namespace zb
         {
 
         }
-        Thread& operator=(const Thread& _t) //为了保证允许匿名引用,必须有该接口，否则该对象析构导致线程引用的对象变为空指针
+        Thread& operator=(const Thread& _t) //为了保证允许匿名引用,必须有该接口，否则该对象过快的析构将导致线程引用的对象变为空指针
         {
             if (_t.m_status == ThreadStatus::NOT_START) //只有_t未开始运行，才允许赋值
             {
