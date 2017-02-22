@@ -51,7 +51,7 @@ void threadcb(void * _t)
     zb::Thread<void (*)(void*)>* p = static_cast<zb::Thread<void (*)(void*)> *>(_t);
     while (p->state() == zb::ThreadStatus::RUNNING)
     {
-        ::Sleep(50);
+        ::Sleep(20);
     }
     log1.debug("thread stop run...");
     log1.flush();
@@ -62,10 +62,20 @@ void test3()
     log1.debug("main start run...");
 
     zb::Thread<void (*)(void*)> _t(threadcb);
-    _t.start();
-    ::Sleep(1500);
+    _t.begin();
+    ::Sleep(10);
     log1.debug("main stop run...");
-    _t.stop();
+    _t.end();
+
+    _t.begin();
+    ::Sleep(10);
+    log1.debug("main stop run...");
+    _t.end();
+
+    _t.begin();
+    ::Sleep(10);
+    log1.debug("main stop run...");
+    _t.end();
     log1.flush();
 
 }
@@ -73,7 +83,8 @@ void test3()
 int main(int argc, char** argv)
 {
     test3();
-    printf("bbbb");
+    
     getchar();
+    printf("bbbb");
     return 0;
 }

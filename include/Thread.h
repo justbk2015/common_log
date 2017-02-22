@@ -25,7 +25,8 @@ namespace zb
         //run是函数对象，实现了void*方法和复制构造方法 ，请确保不要出现死循环，否则线程无法退出
         Thread(T run):m_run(run),
             m_status(new ThreadStatus(ThreadStatus::NOT_START)),
-            m_lock(new zb::Lock())
+            m_lock(new zb::Lock()),
+            m_busy(new bool(false))
         {
 
         }
@@ -41,6 +42,7 @@ namespace zb
                 this->m_lock = _t.m_lock;
                 this->m_status = _t.m_status;
                 this->m_run = _t.m_run;
+                this->m_busy = _t.m_busy;
             }
             throw "can\'t exec operator=,because thread already run!"
         }
@@ -50,11 +52,18 @@ namespace zb
             {
                 delete m_lock;
                 delete m_status;
+                delete m_busy;
             }
         }
     public:
         virtual void start() //直接开始线程
         {
+            if (state() == ThreadStatus::RUNNING)
+            {
+                throw "every time only one thread can run by this thread object!";
+            }
+            *m_status = ThreadStatus::NOT_START;
+            *m_busy = false;
             //注意这里必须传入指针，否则对象过快析构而导致空指针引用
             _beginthread(&Thread::work, NULL, new Thread<T>(*this));
         }
@@ -70,6 +79,7 @@ namespace zb
             start();
             while (1)
             {
+                //不能使用busy函数，因为线程可能过快退出
                 ThreadStatus _state = state();
                 if(_state != ThreadStatus::NOT_START)
                 {
@@ -81,10 +91,11 @@ namespace zb
         virtual void end()//停止线程，等待线程实际停止才返回
         {
             stop();
-            while(state() == ThreadStatus::RUNNING)
+            while(busy())
             {
                 ::Sleep(20);
             }
+            ::Sleep(20);//即使退出也做稍做延时，确保后台线程完全退出
         }
         ThreadStatus state()
         {
@@ -104,22 +115,38 @@ namespace zb
             *m_status = _state;
             m_lock->unlock();
         }
+        bool busy() const
+        {
+            bool busy ;
+            m_lock->lock();
+            busy = *m_busy;
+            m_lock->unlock();
+            return busy;
+        }
+
         T& getRunner() const 
         {
             return m_run;
         }
     protected:
-    protected:
+        void busy(bool flag)
+        {
+            m_lock->lock();
+            *m_busy = flag;
+            m_lock->unlock();
+        }
         static void work(void* p)
         {
             {
                 CopyOnWriteHandle<Thread<T>>  handle(static_cast<Thread<T>*>(p));
+                handle->busy(true);
                 handle->state(ThreadStatus::RUNNING);
                 handle->m_run( ((void*)( handle.get())));
                 if (handle->state() == ThreadStatus::RUNNING)
                 {
                     handle->state(ThreadStatus::STOP);
                 }
+                handle->busy(false);
             } //let CopyOnWriteHandle destroy, otherwise memory leak!
             _endthread();
         }
@@ -127,6 +154,7 @@ namespace zb
         T m_run;
         zb::Lock* m_lock;  //锁操作
         enum ThreadStatus* m_status; //  记录当前线程状态，初始为NOT_START
+        bool *m_busy; //当前线程是否忙碌
         zb::UseCount m_use;//  引用计数器
     };
 }
